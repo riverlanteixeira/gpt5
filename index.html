@@ -256,23 +256,21 @@
 
     <!-- AR Scene -->
     <!-- Substitua a configuração existente da cena AR -->
-    <a-scene 
-        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;" 
-        renderer="antialias: true; alpha: true; precision: medium;" 
-        embedded 
-        gesture-detector 
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+        renderer="antialias: true; alpha: true; precision: medium;"
+        embedded
+        gesture-detector
         id="scene">
     
         <!-- Adicione a câmera com configurações apropriadas -->
-        <a-camera 
-            id="camera" 
-            gps-new-camera="gpsMinDistance: 5; positionMinAccuracy: 10" 
-            rotation-reader 
-            wasd-controls-enabled="false" 
-            cursor="rayOrigin: mouse" 
-            look-controls="pointerLockEnabled: false">
-        </a-camera>
-    
+        <a-camera
+            id="camera"
+            gps-camera="gpsMinDistance: 5; positionMinAccuracy: 10"
+            rotation-reader
+        ></a-camera>
+
         <!-- Outros elementos da cena permanecem inalterados -->
     </a-scene>
 
