@@ -1,0 +1,35 @@
+{
+  "name": "stranger-things-ar",
+  "version": "1.0.0",
+  "description": "Jogo de realidade aumentada com temática Stranger Things usando geolocalização",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8080 -c-1",
+    "build": "echo 'No build process needed for static files'",
+    "test": "echo 'No tests specified'",
+    "deploy": "gh-pages -d ."
+  },
+  "keywords": [
+    "augmented-reality",
+    "webxr",
+    "stranger-things",
+    "geolocation",
+    "aframe",
+    "ar.js",
+    "pwa"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "gh-pages": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/seu-usuario/stranger-things-ar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/seu-usuario/stranger-things-ar/issues"
+  },
+  "homepage": "https://seu-usuario.github.io/stranger-things-ar/"
+}

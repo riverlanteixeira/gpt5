@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Stranger Things AR - Caça aos Objetos</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stranger Things AR">
+    
+    <!-- Samsung S20 FE specific optimization -->
+    <meta name="viewport" content="width=360, height=800, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- A-Frame and AR.js -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #ff0000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        /* Loading screen */
+        .arjs-loader {
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(45deg, #1a1a1a, #2d2d2d);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .stranger-logo {
+            width: 250px;
+            height: auto;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 0 20px #ff0000);
+        }
+
+        .loading-text {
+            text-align: center;
+            font-size: 18px;
+            color: #ff0000;
+            text-shadow: 0 0 10px #ff0000;
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* UI Overlay */
+        .ui-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .mission-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 15px;
+            pointer-events: auto;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .mission-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 5px #ff0000;
+        }
+
+        .mission-description {
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: auto;
+        }
+
+        .control-btn {
+            background: rgba(255, 0, 0, 0.8);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-shadow: 0 0 5px #000;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 0, 0, 1);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+        }
+
+        .radar {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 100px;
+            height: 100px;
+            border: 2px solid #00ff00;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            pointer-events: auto;
+        }
+
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 40px;
+            background: #00ff00;
+            transform-origin: bottom;
+            animation: sweep 3s linear infinite;
+        }
+
+        @keyframes sweep {
+            from { transform: translate(-50%, -100%) rotate(0deg); }
+            to { transform: translate(-50%, -100%) rotate(360deg); }
+        }
+
+        .distance-indicator {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff00;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #00ff00;
+            text-shadow: 0 0 5px #00ff00;
+            pointer-events: auto;
+        }
+
+        /* Samsung S20 FE specific adjustments */
+        @media screen and (max-width: 360px) and (max-height: 800px) {
+            .mission-panel {
+                top: 15px;
+                left: 15px;
+                right: 15px;
+                padding: 12px;
+            }
+            
+            .mission-title {
+                font-size: 15px;
+            }
+            
+            .mission-description {
+                font-size: 13px;
+            }
+            
+            .controls {
+                bottom: 15px;
+                left: 15px;
+                right: 15px;
+            }
+            
+            .control-btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+            
+            .radar {
+                width: 80px;
+                height: 80px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div class="arjs-loader" id="loadingScreen">
+        <img src="./assets/img/stranger-things-logo.png" alt="Stranger Things" class="stranger-logo">
+        <div class="loading-text">
+            Conectando ao Mundo Invertido...<br>
+            Carregando missões do Dustin...
+        </div>
+    </div>
+
+    <!-- UI Overlay -->
+    <div class="ui-overlay">
+        <div class="mission-panel" id="missionPanel">
+            <div class="mission-title" id="missionTitle">Missão 1: Encontre o Walkie-Talkie</div>
+            <div class="mission-description" id="missionDescription">
+                Dustin precisa da sua ajuda! Use seu celular para encontrar objetos espalhados pelo bairro.
+                Caminhe pela área e procure por pistas do Mundo Invertido.
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn" onclick="playCurrentMission()">🔊 Ouvir Missão</button>
+            <button class="control-btn" onclick="toggleRadar()">📡 Radar</button>
+            <button class="control-btn" onclick="nextMission()">➡️ Próxima</button>
+        </div>
+
+        <div class="radar" id="radar">
+            <div class="radar-sweep"></div>
+        </div>
+
+        <div class="distance-indicator" id="distanceIndicator">
+            Procurando objetos...
+        </div>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene
+        vr-mode-ui="enabled: false"
+        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+        renderer="antialias: true; alpha: true; precision: medium;"
+        embedded
+        gesture-detector
+        id="scene">
+        
+        <!-- Camera with GPS -->
+        <a-camera 
+            id="camera"
+            gps-new-camera="gpsMinDistance: 5; positionMinAccuracy: 10"
+            rotation-reader
+            wasd-controls-enabled="false"
+            cursor="rayOrigin: mouse"
+            look-controls="pointerLockEnabled: false">
+        </a-camera>
+
+        <!-- Assets -->
+        <a-assets timeout="10000">
+            <!-- 3D Models -->
+            <a-asset-item id="walkieTalkie" src="./assets/models/walkie_talkie.glb"></a-asset-item>
+            <a-asset-item id="compass" src="./assets/models/compass.glb"></a-asset-item>
+            <a-asset-item id="baseballBat" src="./assets/models/baseball_bat.glb"></a-asset-item>
+            <a-asset-item id="demogorgon" src="./assets/models/demogorgon.glb"></a-asset-item>
+            <a-asset-item id="dungeonGuide" src="./assets/models/dungeon_masters_guide.glb"></a-asset-item>
+            <a-asset-item id="machado" src="./assets/models/machado.glb"></a-asset-item>
+            <a-asset-item id="bicicleta" src="./assets/models/bicicleta-will.glb"></a-asset-item>
+            <a-asset-item id="willInvertido" src="./assets/models/will_byers_mundo_invertido.glb"></a-asset-item>
+            
+            <!-- Dustin Character -->
+            <img id="dustinImg" src="./assets/img/dustin.png">
+            
+            <!-- Audio Files -->
+            <audio id="mission1Audio" src="./assets/audio/dustin-missao-1-completa.mp3" preload="auto"></audio>
+            <audio id="mission2Audio" src="./assets/audio/dustin-missao-2-completa.mp3" preload="auto"></audio>
+            <audio id="mission3Audio" src="./assets/audio/dustin-missao-3-completa.mp3" preload="auto"></audio>
+            <audio id="mission4Audio" src="./assets/audio/dustin-missao-4-completa.mp3" preload="auto"></audio>
+            <audio id="mission5Audio" src="./assets/audio/dustin-missao-5-completa.mp3" preload="auto"></audio>
+            <audio id="mission6Audio" src="./assets/audio/dustin-missao-6-completa.mp3" preload="auto"></audio>
+            <audio id="mission7Audio" src="./assets/audio/dustin-missao-7-completa.mp3" preload="auto"></audio>
+        </a-assets>
+
+        <!-- Dynamic content will be added here -->
+    </a-scene>
+
+    <script src="stranger-things-ar.js"></script>
+</body>
+</html>
