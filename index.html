@@ -255,51 +255,53 @@
     </div>
 
     <!-- AR Scene -->
-    <a-scene
-        vr-mode-ui="enabled: false"
-        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
-        renderer="antialias: true; alpha: true; precision: medium;"
-        embedded
-        gesture-detector
+    <!-- Substitua a configuração existente da cena AR -->
+    <a-scene 
+        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;" 
+        renderer="antialias: true; alpha: true; precision: medium;" 
+        embedded 
+        gesture-detector 
         id="scene">
-        
-        <!-- Camera with GPS -->
+    
+        <!-- Adicione a câmera com configurações apropriadas -->
         <a-camera 
-            id="camera"
-            gps-new-camera="gpsMinDistance: 5; positionMinAccuracy: 10"
-            rotation-reader
-            wasd-controls-enabled="false"
-            cursor="rayOrigin: mouse"
+            id="camera" 
+            gps-new-camera="gpsMinDistance: 5; positionMinAccuracy: 10" 
+            rotation-reader 
+            wasd-controls-enabled="false" 
+            cursor="rayOrigin: mouse" 
             look-controls="pointerLockEnabled: false">
         </a-camera>
-
-        <!-- Assets -->
-        <a-assets timeout="10000">
-            <!-- 3D Models -->
-            <a-asset-item id="walkieTalkie" src="./assets/models/walkie_talkie.glb"></a-asset-item>
-            <a-asset-item id="compass" src="./assets/models/compass.glb"></a-asset-item>
-            <a-asset-item id="baseballBat" src="./assets/models/baseball_bat.glb"></a-asset-item>
-            <a-asset-item id="demogorgon" src="./assets/models/demogorgon.glb"></a-asset-item>
-            <a-asset-item id="dungeonGuide" src="./assets/models/dungeon_masters_guide.glb"></a-asset-item>
-            <a-asset-item id="machado" src="./assets/models/machado.glb"></a-asset-item>
-            <a-asset-item id="bicicleta" src="./assets/models/bicicleta-will.glb"></a-asset-item>
-            <a-asset-item id="willInvertido" src="./assets/models/will_byers_mundo_invertido.glb"></a-asset-item>
-            
-            <!-- Dustin Character -->
-            <img id="dustinImg" src="./assets/img/dustin.png">
-            
-            <!-- Audio Files -->
-            <audio id="mission1Audio" src="./assets/audio/dustin-missao-1-completa.mp3" preload="auto"></audio>
-            <audio id="mission2Audio" src="./assets/audio/dustin-missao-2-completa.mp3" preload="auto"></audio>
-            <audio id="mission3Audio" src="./assets/audio/dustin-missao-3-completa.mp3" preload="auto"></audio>
-            <audio id="mission4Audio" src="./assets/audio/dustin-missao-4-completa.mp3" preload="auto"></audio>
-            <audio id="mission5Audio" src="./assets/audio/dustin-missao-5-completa.mp3" preload="auto"></audio>
-            <audio id="mission6Audio" src="./assets/audio/dustin-missao-6-completa.mp3" preload="auto"></audio>
-            <audio id="mission7Audio" src="./assets/audio/dustin-missao-7-completa.mp3" preload="auto"></audio>
-        </a-assets>
-
-        <!-- Dynamic content will be added here -->
+    
+        <!-- Outros elementos da cena permanecem inalterados -->
     </a-scene>
+
+    <a-assets timeout="10000">
+        <!-- 3D Models -->
+        <a-asset-item id="walkieTalkie" src="./assets/models/walkie_talkie.glb"></a-asset-item>
+        <a-asset-item id="compass" src="./assets/models/compass.glb"></a-asset-item>
+        <a-asset-item id="baseballBat" src="./assets/models/baseball_bat.glb"></a-asset-item>
+        <a-asset-item id="demogorgon" src="./assets/models/demogorgon.glb"></a-asset-item>
+        <a-asset-item id="dungeonGuide" src="./assets/models/dungeon_masters_guide.glb"></a-asset-item>
+        <a-asset-item id="machado" src="./assets/models/machado.glb"></a-asset-item>
+        <a-asset-item id="bicicleta" src="./assets/models/bicicleta-will.glb"></a-asset-item>
+        <a-asset-item id="willInvertido" src="./assets/models/will_byers_mundo_invertido.glb"></a-asset-item>
+        
+        <!-- Dustin Character -->
+        <img id="dustinImg" src="./assets/img/dustin.png">
+        
+        <!-- Audio Files -->
+        <audio id="mission1Audio" src="./assets/audio/dustin-missao-1-completa.mp3" preload="auto"></audio>
+        <audio id="mission2Audio" src="./assets/audio/dustin-missao-2-completa.mp3" preload="auto"></audio>
+        <audio id="mission3Audio" src="./assets/audio/dustin-missao-3-completa.mp3" preload="auto"></audio>
+        <audio id="mission4Audio" src="./assets/audio/dustin-missao-4-completa.mp3" preload="auto"></audio>
+        <audio id="mission5Audio" src="./assets/audio/dustin-missao-5-completa.mp3" preload="auto"></audio>
+        <audio id="mission6Audio" src="./assets/audio/dustin-missao-6-completa.mp3" preload="auto"></audio>
+        <audio id="mission7Audio" src="./assets/audio/dustin-missao-7-completa.mp3" preload="auto"></audio>
+    </a-assets>
+
+    <!-- Dynamic content will be added here -->
+</a-scene>
 
     <script src="stranger-things-ar.js"></script>
 </body>
