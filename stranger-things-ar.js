@@ -56,7 +56,7 @@ class StrangerThingsAR {
             7: {
                 title: "Missão 7: Salve Will Byers",
                 description: "Will está preso no Mundo Invertido! Encontre sua bicicleta e o resgate!",
-                object: "willInvertido",
+                object: "bicicleta",
                 audioFile: "mission7Audio",
                 found: false
             }
@@ -377,8 +377,10 @@ class StrangerThingsAR {
     }
 
     playCollectionSound() {
-        // Implementar som de coleta (pode usar Web Audio API)
-        console.log("Som de coleta reproduzido");
+        const collectionAudio = document.getElementById('mission1Audio'); // Using mission1Audio as a placeholder
+        if (collectionAudio) {
+            collectionAudio.play().catch(e => console.error("Erro ao reproduzir som de coleta:", e));
+        }
     }
 
     hideLoadingScreen() {
@@ -395,8 +397,15 @@ class StrangerThingsAR {
         if (intersectedElement && intersectedElement.hasAttribute('data-mission')) {
             const missionNum = intersectedElement.getAttribute('data-mission');
             const gameObject = this.gameObjects.find(obj => obj.missionNum == missionNum);
-            if (gameObject && !gameObject.found) {
-                this.showCollectionPrompt(gameObject);
+            
+            if (gameObject && !gameObject.found && gameObject.missionNum == this.currentMission) {
+                // Check if the object is within a reasonable distance for interaction
+                const distance = gameObject.distance; // Assuming distance is updated by proximity-detector
+                if (distance !== undefined && distance < 15) { // Allow interaction if within 15 meters
+                    this.showCollectionPrompt(gameObject);
+                } else {
+                    this.updateDistanceIndicator(`Objeto muito distante! ${Math.round(distance)}m`);
+                }
             }
         }
     }
